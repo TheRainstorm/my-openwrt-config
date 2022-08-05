@@ -1,0 +1,16 @@
+config interface 'wg_s2s_b'		#interface name
+	option proto 'wireguard'
+	option private_key 'xxxxxxxxxxxxxxxx'
+	option listen_port '51821'
+	list addresses '10.0.32.2'
+
+config wireguard_wg_s2s_b 's2s_vpn_site_a'
+	option public_key 'xxxxxxxxxxxxxxxx'
+	option preshared_key 'xxxxxxxxxxxxxxxx'
+	option description 'peer name'
+	option route_allowed_ips '1'
+	option persistent_keepalive '25'
+	option endpoint_host 'host name'
+	option endpoint_port '51821'
+	list allowed_ips '192.168.1.0/24'
+	list allowed_ips '10.0.32.0/24'

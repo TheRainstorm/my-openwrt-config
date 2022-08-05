@@ -1,0 +1,5 @@
+config zerotier 'openwrt_network'
+	list join 'xxxxxxxxxxxxx'
+	option enabled '1'
+	option config_path '/etc/zerotier'
+	option secret 'xxxxxxxxxxxxxxxxxxxxx'
