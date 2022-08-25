@@ -1,10 +1,11 @@
+# 默认不用修改
 config zone
         option name 'wg_s2s'    #zone name
         option input 'ACCEPT'
         option output 'ACCEPT'
         option forward 'ACCEPT'
         option masq '1'
-        list network 'wg_s2s_b' #interface name
+        list network 'wg_s2s' #interface name
 
 config forwarding
         option src 'wg_s2s'

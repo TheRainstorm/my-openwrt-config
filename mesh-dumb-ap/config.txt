@@ -1,0 +1,22 @@
+# system
+ROOT_PASSWD='xxx'     #root密码
+HOSTNAME='xxx-mesh'
+# ssh public key
+SSH_PORT='xxx'
+PUB_KEY='xxx'
+
+# mesh
+MESH_NAME="my_mesh"
+MESH_PWD="xxx"
+MESH_RADIO=radio0
+MESH_CHANNEL=1
+
+MESH_WIFI_NAME="xxx"     #创建一个禁用的AP，方便之后切换关闭mesh
+MESH_WIFI_CHANNEL='auto'
+
+# ap
+WIFI_NAME="xxx"
+WIFI_PWD="xxx"
+WIFI_RADIO=radio1
+WIFI_CHANNEL=36
+WIFI_MOBDOMAIN='123d'   #4位16进制数
