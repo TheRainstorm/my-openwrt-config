@@ -4,13 +4,14 @@ HOSTNAME='xxx'
 # network
 LAN_IPADDR='192.168.xx.1'
     ## pppoe
-IS_PPPOE=1
+IS_PPPOE=0
 PPPOE_USERNAME='xxx'
 PPPOE_PASSWORD='xxx'
 # wifi
 WIFI='xxx'          # wifi SSID 2.4GHz
 WIFI_5G='xxx_5G'    # wifi SSID 5GHz
 WIFI_PASSWD='xxx'
+DISABLE_RADIO0=1
 # ssh public key
 SSH_PORT='xxx'
 PUB_KEY='xxxxx'

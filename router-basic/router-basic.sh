@@ -45,6 +45,10 @@ if [ $IS_PPPOE -eq 1 ]; then
     uci set network.wan.password="$PPPOE_PASSWORD"
 else
     echo "[INFO] default dhcp, nothing to do"
+    uci delete network.wan      #delete wan(clean wan config)
+    uci set network.wan=interface   #crate wan
+    uci set network.wan.proto='dhcp'
+    uci set network.wan.device='wan'
 fi
 uci commit network
 
