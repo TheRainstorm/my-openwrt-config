@@ -1,0 +1,13 @@
+config interface 'wg1'
+	option proto 'wireguard'
+	option private_key 'xxxxxxxxxx'
+	list addresses '10.0.31.x/32'
+	option listen_port '51820'
+
+# optional
+config wireguard_wg1
+	option description 'device1'
+	option public_key 'xxxxxxxxxxx'
+	list allowed_ips '10.0.31.x/32'
+	option route_allowed_ips '1'
+	option persistent_keepalive '25'

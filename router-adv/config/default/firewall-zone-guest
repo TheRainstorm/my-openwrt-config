@@ -1,0 +1,12 @@
+# 默认不用修改
+# 允许guest转发到wan上网
+# 不允许访问lan和路由器
+config zone 'guest'
+        option name 'guest'    #zone name
+        option input 'REJECT'
+        option output 'ACCEPT'
+        option forward 'ACCEPT'
+
+config forwarding
+        option src 'guest'
+        option dest 'wan'

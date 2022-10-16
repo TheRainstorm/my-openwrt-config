@@ -8,18 +8,11 @@ config rule
     option family 'ipv6'
 
 config rule
-    option name 'Allow-WireGuard-wg0'
+    option name 'Allow-WireGuard'
     option src 'wan'
     option proto 'udp'
     option target 'ACCEPT'
-    option dest_port '51820'
-
-config rule
-    option name 'Allow-WireGuard-s2s'
-    option src 'wan'
-    option proto 'udp'
-    option target 'ACCEPT'
-    option dest_port '51821'
+    option dest_port '51820-51822'
 
 # forward
 config rule

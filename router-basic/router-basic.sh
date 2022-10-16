@@ -6,23 +6,15 @@
 # ==========================================
 
 
-# ================== basic ==================
+## === system ====
+# password
 echo "[INFO] Updating root password"
 NEWPASSWD=$ROOT_PASSWD
 passwd <<EOF
 $NEWPASSWD
 $NEWPASSWD
 EOF
-
-## === ssh/dropbear ===
-echo "[INFO] change ssh port to $SSH_PORT"
-uci set dropbear.@dropbear[0].Port=$SSH_PORT
-uci commit dropbear
-echo "[INFO] add ssh key"
-echo $PUB_KEY >> /etc/dropbear/authorized_keys
-chmod 644 /etc/dropbear/authorized_keys
-
-## === system ====
+# timezone
 TIMEZONE='CST-8'
 ZONENAME='Asia/Shanghai'
 echo "[INFO] set timezone to $ZONENAME"
@@ -32,11 +24,21 @@ echo "[INFO] set hostname to $HOSTNAME"
 uci set system.@system[0].hostname=$HOSTNAME
 uci commit system
 
-# ================== network ==================
+## === ssh/dropbear ===
+echo "[INFO] change ssh port to $SSH_PORT"
+uci set dropbear.@dropbear[0].Port=$SSH_PORT
+uci commit dropbear
+echo "[INFO] add ssh key"
+echo $PUB_KEY >> /etc/dropbear/authorized_keys
+chmod 644 /etc/dropbear/authorized_keys
+
+## === lan network ===
 echo "[INFO] set LAN ip to $LAN_IPADDR"
 uci set network.lan.proto="static"
 uci set network.lan.ipaddr=$LAN_IPADDR
+uci commit network
 
+## === wan network ===
 echo "[INFO] set WAN to get network"
 if [ $IS_PPPOE -eq 1 ]; then
     echo "[INFO] set pppoe"

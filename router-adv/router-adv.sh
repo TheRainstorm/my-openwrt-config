@@ -3,58 +3,55 @@
 # 备份恢复。比openwrt提供的备份还原功能的优点在于
 # 控制粒度更细，可以只备份自己想要的部分。通常用于
 # 将一个路由器的配置迁移到新路由器
-# 
-# 默认包含
-#   ddns
-#   zerotier
-#   wireguard
 # ==========================================
 ZEROTIER_IP='192.168.196.10'        #修改为自己的zerotier地址
 ZEROTIER_MASK='255.255.255.0'
 
+# ================================ firewall ================================
+# === firewall/zone ===
+echo "[INFO] firewall zone"
+uci -m import firewall < ./default/firewall-zone-guest  #创建 guest zone
+# === firewall/rule ===
+echo "[INFO] firewall rule"
+uci -m import firewall < ./default/firewall-rule-basic
 
-# ============direct import ==================
+# ================================ wireguard ================================
+# === wireguard/s2s ===
+echo "[INFO] load wg_s2s network"
+uci -m import network < ./network-wg_s2s
+echo "[INFO] load wireguard wg_s2s"
+uci -m import firewall < ./default/firewall-zone-wg_s2s
+uci add_list firewall.wg_s2s.network='wg_s2s'       # 添加到 wg_s2s zone
+
+# === wireguard/wg0 ===
+echo "[INFO] load wg0 network"
+uci -m import network < ./network-wg0
+echo "[INFO] add wg0 to lan"
+uci add_list firewall.@zone[0].network='wg0'        #添加到 lan zone
+
+# === wireguard/wg1 ===
+echo "[INFO] load wg1 network"
+uci -m import network < ./network-wg1
+echo "[INFO] load firewall guest"
+uci add_list firewall.guest.network='wg1'           #添加到 guest zone
+
+# ================================ else ================================
 # === ddns ===
 echo "[INFO] Import ddns config"
-uci -m import ddns < ./config/ddns
-uci commit ddns
+uci -m import ddns < ./ddns
 
 # === zerotier ===
 echo "[INFO] Import zerotier config"
 mkdir /etc/zerotier
-uci -m import zerotier < ./config/zerotier
-uci commit zerotier
-
+uci -m import zerotier < ./zerotier
 echo "[INFO] start zerotier"
 /etc/init.d/zerotier enable
 /etc/init.d/zerotier start
-
 echo "[INFO] add zerotier network"
 uci set network.Zerotier=interface
 uci set network.Zerotier.proto='static'
 uci set network.Zerotier.device='ztyou4dlov'
 uci set network.Zerotier.netmask=$ZEROTIER_MASK
 uci set network.Zerotier.ipaddr=$ZEROTIER_IP
-uci commit network
-
 echo "[INFO] add zerotier to lan zone"
-uci add_list firewall.@zone[0].network='Zerotier'   #add firewire zone
-uci commit firewall
-
-# ============ self config ==================
-# wireguard
-echo "[INFO] load wireguard network"
-uci -m import network < ./config/network-wg_s2s
-uci -m import network < ./config/network-wg0
-uci commit network
-echo "[INFO] load wireguard firewall"
-uci -m import firewall < ./config/firewall-wg_s2s
-uci add_list firewall.@zone[0].network='wg0'   #add wg0 to lan
-uci commit firewall
-
-# === firewall ===
-# https://openwrt.org/docs/guide-user/firewall/firewall_configuration
-# 默认可能有一个include /etc/firewall.user的规则，为了防止冲突，使用自定义名字
-echo "[INFO] set basic firewall"
-uci -m import firewall < ./config/firewall-basic
-uci commit firewall
+uci add_list firewall.@zone[0].network='Zerotier'   # add Zerotier to lan
