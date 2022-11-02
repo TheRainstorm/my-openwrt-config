@@ -47,10 +47,7 @@ if [ $IS_PPPOE -eq 1 ]; then
     uci set network.wan.password="$PPPOE_PASSWORD"
 else
     echo "[INFO] default dhcp, nothing to do"
-    uci delete network.wan      #delete wan(clean wan config)
-    uci set network.wan=interface   #crate wan
     uci set network.wan.proto='dhcp'
-    uci set network.wan.device='wan'
 fi
 uci commit network
 
@@ -79,8 +76,10 @@ if [ $IS_PPPOE -eq 0 ]; then
     uci set dhcp.lan.dhcpv6='relay'
     uci set dhcp.lan.ndp='relay'
     uci set dhcp.lan.ra_flags='none'
-    uci delete dhcp.wan6
-    uci set dhcp.wan6=dhcp      #add named section, name=wan6
+    if ! uci -q show dhcp.wan6
+    then
+        uci set dhcp.wan6=dhcp      #add named section, name=wan6
+    fi
     uci set dhcp.wan6.interface='wan6'
     uci set dhcp.wan6.dhcpv6='relay'
     uci set dhcp.wan6.ra='relay'
@@ -92,7 +91,7 @@ else
     # 设置wan.ipv6='auto'就可以正常ipv6上网了
     # 另外设置lan.ip6class='wan_6'可以避免LAN获得ULA地址（私有ipv6地址）
     echo "[INFO] set ipv6/pppoe"
-    uci delete network.wan6
+    uci delete network.wan6     #pppoe会自动生成wan_6，不需要wan6
     uci set network.wan.ipv6='auto'
     uci del_list network.lan.ip6class
     uci add_list network.lan.ip6class='wan_6'

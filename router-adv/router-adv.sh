@@ -55,3 +55,5 @@ uci set network.Zerotier.netmask=$ZEROTIER_MASK
 uci set network.Zerotier.ipaddr=$ZEROTIER_IP
 echo "[INFO] add zerotier to lan zone"
 uci add_list firewall.@zone[0].network='Zerotier'   # add Zerotier to lan
+
+uci commit  #commit all
